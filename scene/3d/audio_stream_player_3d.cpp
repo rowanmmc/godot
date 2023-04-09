@@ -445,7 +445,7 @@ Vector<AudioFrame> AudioStreamPlayer3D::_update_panning() {
 	}
 	
 	if (!listener_node){
-		return output_volume_vector
+		return output_volume_vector;
 	}
 	
 	Vector3 area_sound_pos;
