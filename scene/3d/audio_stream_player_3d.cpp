@@ -523,7 +523,8 @@ Vector<AudioFrame> AudioStreamPlayer3D::_update_panning() {
 		Vector3 listener_velocity;
 
 		if (listener_is_camera) {
-			listener_velocity = camera->get_doppler_tracked_velocity();
+			Camera3D *listener_cam = Object::cast_to<Camera3D>(listener_node);
+			listener_velocity = listener_cam->get_doppler_tracked_velocity();
 		}
 
 		Vector3 local_velocity = listener_node->get_global_transform().orthonormalized().basis.xform_inv(linear_velocity - listener_velocity);
