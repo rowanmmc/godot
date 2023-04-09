@@ -398,10 +398,10 @@ Vector<AudioFrame> AudioStreamPlayer3D::_update_panning() {
 	PhysicsDirectSpaceState3D *space_state = PhysicsServer3D::get_singleton()->space_get_direct_state(world_3d->get_space());
 	
 	// Get the Listener Node that is closest to this sound. 
-	Node3D *listener_node;
+	Node3D *listener_node = NULL;
 	bool listener_is_camera = true;
 	float closest_listener_distance = -1.0f;
-	float dist;
+	float dist = 0.0f;
 	Vector3 local_pos;
 
 	for (Camera3D *camera : cameras) {
@@ -416,8 +416,7 @@ Vector<AudioFrame> AudioStreamPlayer3D::_update_panning() {
 			continue;
 		}
 		
-		Node3D *evaluated_listener_node;
-		evaluated_listener_node = camera;
+		Node3D *evaluated_listener_node = camera;
 		bool evaluated_listener_is_camera = true;
 		// listener_is_camera = true;
 		// Node3D *listener_node = camera;
@@ -428,7 +427,7 @@ Vector<AudioFrame> AudioStreamPlayer3D::_update_panning() {
 			evaluated_listener_is_camera = false;
 		}
 
-		Vector3 evaluated_local_pos = listener_node->get_global_transform().orthonormalized().affine_inverse().xform(global_pos);
+		Vector3 evaluated_local_pos = evaluated_listener_node->get_global_transform().orthonormalized().affine_inverse().xform(global_pos);
 
 		float evaluated_dist = evaluated_local_pos.length();
 		
@@ -465,7 +464,7 @@ Vector<AudioFrame> AudioStreamPlayer3D::_update_panning() {
 			total_max = MAX(total_max, listener_area_pos.length());
 		}
 		if (total_max > max_distance) {
-			continue; //can't hear this sound in this listener
+			return output_volume_vector; //can't hear this sound in this listener
 		}
 	}
 
